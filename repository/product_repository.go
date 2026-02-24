@@ -6,6 +6,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// Contract
 type ProductRepository interface {
 	FindAll() ([]models.Product, error)
 	FindByID(id uint) (models.Product, error)

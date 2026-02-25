@@ -54,7 +54,7 @@ func (h *ProductHandler) Update(c *gin.Context) {
 	var input models.Product
 	c.ShouldBindJSON(&input)
 
-	data, err := h.service.Update(id, input)
+	data, err := h.service.Update(uint(id), input)
 
 	if err != nil {
 		c.JSON(404, gin.H{"error": err.Error()})

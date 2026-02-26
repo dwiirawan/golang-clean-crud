@@ -13,13 +13,18 @@ type ProductHandler struct {
 	service service.ProductService
 }
 
+// Return ProductHandler struct
 func NewProductHandler(s service.ProductService) *ProductHandler {
 	return &ProductHandler{s}
 }
 
 func (h *ProductHandler) GetAll(c *gin.Context) {
 	data, _ := h.service.GetAll()
-	c.JSON(http.StatusOK, data)
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"message": "List Data Products",
+		"data":    data,
+	})
 }
 
 func (h *ProductHandler) GetByID(c *gin.Context) {
@@ -61,7 +66,11 @@ func (h *ProductHandler) Update(c *gin.Context) {
 		return
 	}
 
-	c.JSON(200, data)
+	c.JSON(200, gin.H{
+		"success": true,
+		"message": "Products updated successfully",
+		"data":    data,
+	})
 }
 
 func (h *ProductHandler) Delete(c *gin.Context) {

@@ -27,33 +27,33 @@ func NewProductRepository(db *gorm.DB) ProductRepository {
 }
 
 // Create implements ProductRepository.
-func (p *productRepository) Create(product models.Product) (models.Product, error) {
-	err := p.db.Create(&product).Error
+func (r *productRepository) Create(product models.Product) (models.Product, error) {
+	err := r.db.Create(&product).Error
 	return product, err
 }
 
 // Delete implements ProductRepository.
-func (p *productRepository) Delete(id uint) error {
-	return p.db.Delete(&models.Product{}, id).Error
+func (r *productRepository) Delete(id uint) error {
+	return r.db.Delete(&models.Product{}, id).Error
 
 }
 
 // FindAll implements ProductRepository.
-func (p *productRepository) FindAll() ([]models.Product, error) {
+func (r *productRepository) FindAll() ([]models.Product, error) {
 	var products []models.Product
-	err := p.db.Find(&products).Error
+	err := r.db.Find(&products).Error
 	return products, err
 }
 
 // FindByID implements ProductRepository.
-func (p *productRepository) FindByID(id uint) (models.Product, error) {
+func (r *productRepository) FindByID(id uint) (models.Product, error) {
 	var products models.Product
-	err := p.db.First(&products, id).Error
+	err := r.db.First(&products, id).Error
 	return products, err
 }
 
 // Update implements ProductRepository.
-func (p *productRepository) Update(product models.Product) (models.Product, error) {
-	err := p.db.Save(&product).Error
+func (r *productRepository) Update(product models.Product) (models.Product, error) {
+	err := r.db.Save(&product).Error
 	return product, err
 }

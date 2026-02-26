@@ -14,41 +14,45 @@ type ProductService interface {
 	Delete(id uint) error
 }
 
-type productRepository struct {
+type productService struct {
 	repo repository.ProductRepository
 }
 
+// Function NewProductService receive ProductRepository interface
+// Return_Type: ProductService interface
+// Return_Value: productService, struct implementasi service
+// (struct automatically becomes an interface )
 func NewProductService(p repository.ProductRepository) ProductService {
-	return &productRepository{p}
+	return &productService{p}
 }
 
 // Create implements ProductService.
-func (p *productRepository) Create(product models.Product) (models.Product, error) {
+func (s *productService) Create(product models.Product) (models.Product, error) {
 	if product.Name == "" {
 		return product, errors.New("name required")
 	}
 
-	return p.repo.Create(product)
+	return s.repo.Create(product)
 }
 
 // Delete implements ProductService.
-func (p *productRepository) Delete(id uint) error {
-	return p.repo.Delete(id)
+func (s *productService) Delete(id uint) error {
+	return s.repo.Delete(id)
 }
 
 // GetAll implements ProductService.
-func (p *productRepository) GetAll() ([]models.Product, error) {
-	return p.repo.FindAll()
+func (s *productService) GetAll() ([]models.Product, error) {
+	return s.repo.FindAll()
 }
 
 // GetbyID implements ProductService.
-func (p *productRepository) GetbyID(id uint) (models.Product, error) {
-	return p.repo.FindByID(id)
+func (s *productService) GetbyID(id uint) (models.Product, error) {
+	return s.repo.FindByID(id)
 }
 
 // Update implements ProductService.
-func (p *productRepository) Update(id uint, input models.Product) (models.Product, error) {
-	product, err := p.repo.FindByID(id)
+func (s *productService) Update(id uint, input models.Product) (models.Product, error) {
+	product, err := s.repo.FindByID(id)
 	if err != nil {
 		return product, err
 	}
@@ -57,5 +61,5 @@ func (p *productRepository) Update(id uint, input models.Product) (models.Produc
 	product.Price = input.Price
 	product.Stock = input.Stock
 
-	return p.repo.Update(product)
+	return s.repo.Update(product)
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"golang-clean-crud/config"
+	"golang-clean-crud/entity"
 	"golang-clean-crud/handler"
 	"golang-clean-crud/models"
 	"golang-clean-crud/repository"
@@ -14,6 +15,7 @@ import (
 func main() {
 	config.ConnectDB()
 	config.DB.AutoMigrate(&models.Product{})
+	config.DB.AutoMigrate(&entity.User{})
 
 	r := gin.Default()
 

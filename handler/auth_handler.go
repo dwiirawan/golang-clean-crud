@@ -48,3 +48,18 @@ func (h *AuthHandler) Login(c *gin.Context) {
 		"token":   token,
 	})
 }
+
+func (h *AuthHandler) Refresh(c *gin.Context) {
+	var body struct {
+		RefreshToken string `json:"refresh_token"`
+	}
+	c.ShouldBindJSON(&body)
+
+	token, err := h.service.RefreshToken(body.RefreshToken)
+	if err != nil {
+		c.JSON(401, gin.H{"error": "Invalid Refresh Token"})
+		return
+	}
+
+	c.JSON(200, gin.H{"access_token": token})
+}

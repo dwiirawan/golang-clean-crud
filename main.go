@@ -18,11 +18,19 @@ func main() {
 	r := gin.Default()
 
 	// Dependency Injection
+	// repository
 	productRepo := repository.NewProductRepository(config.DB)
-	productService := service.NewProductService(productRepo)
-	productsHandler := handler.NewProductHandler(productService)
+	userRepo := repository.NewUserRepository(config.DB)
 
-	routes.SetupRoutes(r, productsHandler)
+	// service
+	productService := service.NewProductService(productRepo)
+	userService := service.NewAuthService(userRepo)
+
+	// handler
+	productsHandler := handler.NewProductHandler(productService)
+	authHandler := handler.NewAuthHandler(userService)
+
+	routes.SetupRoutes(r, productsHandler, authHandler)
 
 	r.Run(":8080")
 }

@@ -2,16 +2,32 @@ package routes
 
 import (
 	"golang-clean-crud/handler"
+	"golang-clean-crud/middleware"
 
 	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes(r *gin.Engine, h *handler.ProductHandler) {
-	api := r.Group("/api")
+func SetupRoutes(
+	r *gin.Engine,
+	productHandler *handler.ProductHandler,
+	authHandler *handler.AuthHandler,
+) {
+	// PUBLIC ROUTES
+	auth := r.Group("/auth")
+	{
+		auth.POST("/register", authHandler.Register)
+		auth.POST("/login", authHandler.Login)
+	}
 
-	api.GET("/products", h.GetAll)
-	api.GET("/products/:id", h.GetByID)
-	api.POST("/products", h.Create)
-	api.PUT("/products/:id", h.Update)
-	api.DELETE("/products/:id", h.Delete)
+	// PROTECTED ROUTES (JWT)
+	api := r.Group("/api")
+	api.Use(middleware.AuthMiddleware())
+	{
+		// PRODUCT CRUD
+		api.GET("/products", productHandler.GetAll)
+		api.GET("/products/:id", productHandler.GetByID)
+		api.POST("/products", productHandler.Create)
+		api.PUT("/products/:id", productHandler.Update)
+		api.DELETE("/products/:id", productHandler.Delete)
+	}
 }

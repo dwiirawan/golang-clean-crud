@@ -63,3 +63,25 @@ func (h *AuthHandler) Refresh(c *gin.Context) {
 
 	c.JSON(200, gin.H{"access_token": token})
 }
+
+func (h *AuthHandler) Logout(c *gin.Context) {
+	// Get user_id from JWT Middleware
+	userIDValue, exists := c.Get("user_id")
+
+	if !exists {
+		c.JSON(401, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	userID := uint(userIDValue.(float64))
+
+	err := h.service.Logout(userID)
+	if err != nil {
+		c.JSON(500, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Logout success",
+	})
+}

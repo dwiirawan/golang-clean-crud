@@ -29,3 +29,18 @@ func AuthMiddleware() gin.HandlerFunc {
 		c.Next()
 	}
 }
+
+func AdminOnly() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		role := c.GetString("role")
+
+		if role != "admin" {
+			c.AbortWithStatusJSON(403, gin.H{
+				"error": "Forbidden",
+			})
+			return
+		}
+
+		c.Next()
+	}
+}
